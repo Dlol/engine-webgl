@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+    <script src="src/gl-matrix-min.js"></script>
+    <script src="src/Types.ts"></script>
+    <script src="src/Canvas.ts"></script>
+    <script src="src/Buffers.ts"></script>
+    <script src="src/Events.ts"></script>
+    <script src="src/Shader.ts"></script>
+    <script src="src/Texture.ts"></script>
+    <script src="src/Shapes.ts"></script>
+    <style>
+      body, html{
+        margin: 0;
+        overflow: hidden;
+        padding: 0;
+      }
+      canvas{
+        /* cursor: none; */
+      }
+      .ui{
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        background-color: rgba(0, 0, 0, 0.603);
+        display: flex;
+        flex-direction: column;
+        padding: 2px;
+        border-radius: 2px;
+      }
+      .row{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script src="/src/script.ts"></script>
+  </body>
+</html>
