@@ -109,7 +109,7 @@ class Game{
 
 		const { gl } = this.canvas;
 		const programInfo = this.shader?.programInfo;
-		const buffers = this.buffers;
+		// const buffers = this.buffers;
 		gl.enable(gl.BLEND)
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
 
@@ -219,10 +219,10 @@ let pos:Vec2 = {
 	y: 5
 }
 
-let scale:Vec2 = {
-	x: 1,
-	y: 1
-}
+// let scale:Vec2 = {
+// 	x: 1,
+// 	y: 1
+// }
 
 
 const canvas = new Canvas(window.innerWidth, window.innerHeight);

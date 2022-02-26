@@ -2,8 +2,8 @@ import Canvas from "./Canvas";
 
 class ProgramInfo{
 	program: WebGLProgram;
-	attribLocations: {};
-	uniformLocations: {};
+	attribLocations: any;
+	uniformLocations: any;
 	constructor(program: WebGLProgram, attribLocations = {}, uniformLocations = {}) {
 		this.program = program;
 		this.attribLocations = attribLocations;
@@ -62,6 +62,7 @@ export default class Shader{
 			return null;
 		}
 		
+		// @ts-ignore
 		this.program = shaderProgram;
 		this.programInfo = new ProgramInfo(this.program)
 	}

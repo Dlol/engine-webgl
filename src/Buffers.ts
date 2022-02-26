@@ -8,6 +8,7 @@ class VertexBuffer{
 		this.gl = gl;
 		this.buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
+		// @ts-ignore
 		gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(data), type);
 	}
 
@@ -30,6 +31,7 @@ class IndexBuffer{
 		this.gl = gl;
 		this.buffer = gl.createBuffer();
 		gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, this.buffer);
+		// @ts-ignore
 		gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(data), type);
 	}
 

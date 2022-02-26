@@ -5,7 +5,7 @@ let mousePos: Vec2 = {
 	y: 0
 }
 
-let curkeys: object[] = [];
+let curkeys: boolean[] = [];
 let mouseButton: boolean[] = [];
 
 window.addEventListener("keydown", (e) => {
