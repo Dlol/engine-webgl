@@ -16,7 +16,7 @@
   },
   "git": {
     "scripts": {
-      "pre-push": "surge --project ./dist/ --domain dlols-engine-test.surge.sh"
+      "pre-push": "npx surge --project ./dist/ --domain dlols-engine-test.surge.sh"
     }
   },
   "dependencies": {
