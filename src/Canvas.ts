@@ -3,11 +3,11 @@ const { mat2, mat3, mat4, vec2, vec3, vec4, quat } = glMatrix;
 
 class Canvas{
 	c: HTMLCanvasElement;
-	gl: WebGLRenderingContext;
+	gl: WebGLRenderingContext | null;
 	constructor(width:number, height:number){
 		this.c = document.createElement("canvas");
-		this.c.setAttribute("width", width);
-		this.c.setAttribute("height", height);
+		this.c.setAttribute("width", String(width));
+		this.c.setAttribute("height", String(height));
 		this.c.addEventListener("contextmenu", (e)=>{e.preventDefault();})
 		this.gl = this.c.getContext("webgl");
 		if (!this.gl) {

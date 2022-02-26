@@ -1,7 +1,7 @@
 class VertexBuffer{
 	buffer: WebGLBuffer | null;
-	gl: WebGL2RenderingContext;
-	constructor(data:Number[], gl:WebGL2RenderingContext, type?:GLenum){
+	gl: WebGLRenderingContext;
+	constructor(data:Number[], gl:WebGLRenderingContext, type?:GLenum){
 		if (type == null){
 			type = gl.STATIC_DRAW
 		}
@@ -23,7 +23,7 @@ class VertexBuffer{
 class IndexBuffer{
 	gl: any;
 	buffer: any;
-	constructor(data:Number[], gl:WebGL2RenderingContext, type?:GLenum){
+	constructor(data:Number[], gl:WebGLRenderingContext, type?:GLenum){
 		if (type == null){
 			type = gl.STATIC_DRAW
 		}

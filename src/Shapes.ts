@@ -2,7 +2,7 @@ interface Shape{
 	position: Vec2;
 	size: Vec2;
 	canvas: HTMLCanvasElement;
-	ctx: WebGL2RenderingContext;
+	ctx: WebGLRenderingContext;
 	color: Color;
 	shader: Shader;
 	draw(): void;
@@ -11,13 +11,13 @@ class Rectangle implements Shape{
 	position: Vec2;
 	size: Vec2;
 	canvas: HTMLCanvasElement;
-	ctx: WebGL2RenderingContext;
+	ctx: WebGLRenderingContext;
 	color: Color;
 	shader: Shader;
 	vb: VertexBuffer;
 	ib: IndexBuffer;
 
-	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGL2RenderingContext, color: Color, shader: Shader, dynamic:boolean = false) {
+	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGLRenderingContext, color: Color, shader: Shader, dynamic:boolean = false) {
 		this.position = pos;
 		this.size = size;
 		this.canvas = canvas;
@@ -45,7 +45,7 @@ class Rectangle implements Shape{
 	draw():void {
 		const {programInfo} = this.shader;
 		this.shader.bind();
-		this.ctx.uniform4f(programInfo.uniformLocations.color, this.color.r, this.color.g, this.color.b, this.color.a);
+		this.ctx.uniform4f(programInfo?.uniformLocations.color, this.color.r, this.color.g, this.color.b, this.color.a);
 		this.ib.bind();
 		this.vb.bind();
 
@@ -55,14 +55,14 @@ class Rectangle implements Shape{
 		const stride = 0;
 		const offset = 0;
 		this.ctx.vertexAttribPointer(
-			programInfo.attribLocations.vertexPosition,
+			programInfo?.attribLocations.vertexPosition,
 			numComponents,
 			type,
 			normalize,
 			stride,
 			offset,
 		);
-		this.ctx.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+		this.ctx.enableVertexAttribArray(programInfo?.attribLocations.vertexPosition);
 		this.ctx.drawElements(this.ctx.TRIANGLES, 6, this.ctx.UNSIGNED_BYTE, 0)
 	}
 }
@@ -71,12 +71,12 @@ class Triangle implements Shape {
 	position: Vec2;
 	size: Vec2;
 	canvas: HTMLCanvasElement;
-	ctx: WebGL2RenderingContext;
+	ctx: WebGLRenderingContext;
 	color: Color;
 	shader: Shader;
 	ib: IndexBuffer;
 	vb: VertexBuffer;
-	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGL2RenderingContext, color: Color, shader: Shader, dynamic:boolean = false) {
+	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGLRenderingContext, color: Color, shader: Shader, dynamic:boolean = false) {
 		this.position = pos;
 		this.size = size;
 		this.canvas = canvas;
@@ -101,7 +101,7 @@ class Triangle implements Shape {
 	draw():void {
 		const {programInfo} = this.shader;
 		this.shader.bind();
-		this.ctx.uniform4f(programInfo.uniformLocations.color, this.color.r, this.color.g, this.color.b, this.color.a);
+		this.ctx.uniform4f(programInfo?.uniformLocations.color, this.color.r, this.color.g, this.color.b, this.color.a);
 		this.ib.bind();
 		this.vb.bind();
 
@@ -111,14 +111,14 @@ class Triangle implements Shape {
 		const stride = 0;
 		const offset = 0;
 		this.ctx.vertexAttribPointer(
-			programInfo.attribLocations.vertexPosition,
+			programInfo?.attribLocations.vertexPosition,
 			numComponents,
 			type,
 			normalize,
 			stride,
 			offset,
 		);
-		this.ctx.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+		this.ctx.enableVertexAttribArray(programInfo?.attribLocations.vertexPosition);
 		this.ctx.drawElements(this.ctx.TRIANGLES, 3, this.ctx.UNSIGNED_BYTE, 0)
 	}
 }
@@ -128,14 +128,15 @@ class TextureRect implements Shape{
 	position: Vec2;
 	size: Vec2;
 	canvas: HTMLCanvasElement;
-	ctx: WebGL2RenderingContext;
+	ctx: WebGLRenderingContext;
 	color: Color;
 	shader: Shader;
 	vb: VertexBuffer;
 	ib: IndexBuffer;
 	tb: VertexBuffer;
 
-	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGL2RenderingContext, texUrl: string, shader: Shader, dynamic:boolean = false) {
+	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGLRenderingContext, texUrl: string, shader: Shader, dynamic:boolean = false) {
+		this.color = Colors.transparent;
 		this.position = pos;
 		this.size = size;
 		this.canvas = canvas;
@@ -178,14 +179,14 @@ class TextureRect implements Shape{
 		const stride = 0;
 		const offset = 0;
 		this.ctx.vertexAttribPointer(
-			programInfo.attribLocations.vertexPosition,
+			programInfo?.attribLocations.vertexPosition,
 			numComponents,
 			type,
 			normalize,
 			stride,
 			offset,
 		);
-		this.ctx.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+		this.ctx.enableVertexAttribArray(programInfo?.attribLocations.vertexPosition);
 		this.ctx.drawElements(this.ctx.TRIANGLES, 6, this.ctx.UNSIGNED_BYTE, 0)
 	}
 }

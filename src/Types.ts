@@ -63,4 +63,8 @@ class Colors {
     static get magenta(): Color{
         return {r:1, g:0, b:1, a:1};
     }
+
+    static get transparent(): Color{
+        return {r: 0, g:0, b:0, a:0};
+    }
 }

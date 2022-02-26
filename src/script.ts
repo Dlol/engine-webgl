@@ -90,14 +90,18 @@ class Game{
 		// console.log(shader);
 	
 		// Draw the scene
-		this.drawScene();
+		if (this.shader.programInfo == null || this.shader == null) {
+			alert("screaming screaming this.main()")
+		} else {
+			this.drawScene();
+		}
 	}
 
 
 	drawScene() {
 
 		const { gl } = this.canvas;
-		const programInfo = this.shader.programInfo;
+		const programInfo = this.shader?.programInfo;
 		const buffers = this.buffers;
 		gl.enable(gl.BLEND)
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -130,34 +134,34 @@ class Game{
 	
 		// Tell WebGL to use our program when drawing
 	
-		gl.useProgram(programInfo.program);
+		gl.useProgram(programInfo?.program);
 	
 		// Set the shader uniforms
 	
 		gl.uniformMatrix4fv(
-			programInfo.uniformLocations.projectionMatrix,
+			programInfo?.uniformLocations.projectionMatrix,
 			false,
 			projectionMatrix,
 		);
 		gl.uniformMatrix4fv(
-			programInfo.uniformLocations.viewMatrix,
+			programInfo?.uniformLocations.viewMatrix,
 			false,
 			this.viewMatrix,
 		);
 		gl.uniformMatrix4fv(
-			programInfo.uniformLocations.modelMatrix,
+			programInfo?.uniformLocations.modelMatrix,
 			false,
 			this.modelMatrix
 		)
-		gl.uniform4f(programInfo.uniformLocations.color, 1, 0.5, 0.3, 1);
+		gl.uniform4f(programInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
 		// this.draw()
 		ugh(0)
 	}
 
-	draw(delta: number) {
+	draw(_delta: number) {
 		// console.log(this);
 		const { gl } = this.canvas;
-		const programInfo = this.shader.programInfo;
+		// const programInfo = this.shader.programInfo;
 
 		gl.clearColor(0.0, 0.0, 0.0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -212,12 +216,16 @@ let scale:Vec2 = {
 	y: 1
 }
 
-// loads the shaders
-// let vsResponse = await fetch("vert.shader");
-// let fsResponse = await fetch("frag.shader");
+
 const canvas = new Canvas(window.innerWidth, window.innerHeight);
 
-document.getElementById('app').appendChild(canvas.c);
+let elem = document.getElementById('app');
+if (elem == null) {
+	alert("screaming screaming")
+}
+else{
+	elem.appendChild(canvas.c);
+}
 
 const game = new Game(canvas);
 
