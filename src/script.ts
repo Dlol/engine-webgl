@@ -1,5 +1,12 @@
 // basically importing but in pre es2016 ig
 // const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
+import {mat4} from 'gl-matrix-ts'
+
+import { mouseButton, mousePos } from "./Events";
+import Canvas from "./Canvas";
+import Shader from "./Shader";
+import { Rectangle } from './Shapes';
+import { Vec2, Colors } from "./Types";
 
 class Cell {
 	enabled: boolean;
@@ -38,7 +45,7 @@ class Game{
 	grid: Cell[];
 	counter: number;
 	gridDimen: any;
-	shapeTest: Shape;
+	// shapeTest: Shape;
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
 		this.counter = 0;
@@ -85,7 +92,7 @@ class Game{
 		}
 		
 
-		this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas.c, canvas.gl, Colors.red, this.shader, true);
+		// this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas.c, canvas.gl, Colors.red, this.shader, true);
 	
 		// console.log(shader);
 	
@@ -149,6 +156,7 @@ class Game{
 			this.viewMatrix,
 		);
 		gl.uniformMatrix4fv(
+			// @ts-ignore
 			programInfo?.uniformLocations.modelMatrix,
 			false,
 			this.modelMatrix
@@ -195,7 +203,7 @@ class Game{
 			element.draw();
 		});
 
-		this.shapeTest.draw();
+		// this.shapeTest.draw();
 
 		
 	}
@@ -260,13 +268,3 @@ Shader.Load("assets/Basic.shader").then((val)=>{
 
 
 
-
-// main();
-
-function scalerx(value: number) {
-	scale.x = value;
-}
-
-function scalery(value: number) {
-	scale.y = value;
-}

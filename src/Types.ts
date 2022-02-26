@@ -1,3 +1,4 @@
+export { Vec2, Vec3, Color, Colors };
 type Vec2 = {
 	x: number;
 	y: number;

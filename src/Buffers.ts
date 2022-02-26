@@ -41,3 +41,5 @@ class IndexBuffer{
 		this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, 0);
 	}
 }
+
+export {VertexBuffer, IndexBuffer}

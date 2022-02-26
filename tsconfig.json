@@ -11,8 +11,10 @@
     "esModuleInterop": true,
     "noEmit": true,
     "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "noImplicitReturns": true
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "noEmitOnError": false,
+    "strictNullChecks": false
   },
   "include": ["src"]
 }

@@ -1,9 +1,11 @@
-let mousePos = {
+import { Vec2 } from "./Types";
+
+let mousePos: Vec2 = {
 	x: 0,
 	y: 0
 }
 
-let curkeys = [];
+let curkeys: object[] = [];
 let mouseButton: boolean[] = [];
 
 window.addEventListener("keydown", (e) => {
@@ -23,3 +25,5 @@ window.addEventListener("mousedown", (e) =>{
 window.addEventListener("mouseup", (e) =>{
 	mouseButton[e.button] = false;
 })
+
+export { curkeys, mouseButton, mousePos }

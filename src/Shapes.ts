@@ -1,3 +1,7 @@
+import {Vec2, Color, Colors} from "./Types";
+import Shader from "./Shader";
+import { VertexBuffer, IndexBuffer } from "./Buffers";
+
 interface Shape{
 	position: Vec2;
 	size: Vec2;
@@ -190,3 +194,5 @@ class TextureRect implements Shape{
 		this.ctx.drawElements(this.ctx.TRIANGLES, 6, this.ctx.UNSIGNED_BYTE, 0)
 	}
 }
+
+export { Rectangle, Triangle, TextureRect };

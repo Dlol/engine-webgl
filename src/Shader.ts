@@ -1,3 +1,5 @@
+import Canvas from "./Canvas";
+
 class ProgramInfo{
 	program: WebGLProgram;
 	attribLocations: {};
@@ -9,7 +11,7 @@ class ProgramInfo{
 	}
 }
 
-class Shader{
+export default class Shader{
 	canvas: Canvas;
 	programInfo: ProgramInfo | undefined;
 	constructor(canvas: Canvas){
@@ -35,7 +37,7 @@ class Shader{
 		// console.log(this.canvas.gl.getUniformLocation(this.program, loc));
 	}
 
-	initShaderProgram(vsSource: string, fsSource:string) {
+	initShaderProgram(vsSource: string, fsSource:string): void | null {
 		const { gl } = this.canvas;
 		const vertexShader = this.loadShader(gl, gl.VERTEX_SHADER, vsSource);
 		const fragmentShader = this.loadShader(gl, gl.FRAGMENT_SHADER, fsSource);
@@ -68,7 +70,7 @@ class Shader{
 	// creates a shader of the given type, uploads the source and
 	// compiles it.
 	//
-	loadShader(gl: WebGLRenderingContext, type, source) {
+	loadShader(gl: WebGLRenderingContext, type: GLenum, source: string) {
 		const shader = gl.createShader(type);
 	
 		// Send the source to the shader object
@@ -102,7 +104,7 @@ class Shader{
 	}
 
 	static async Load(url:string): Promise<object>{
-		let shaderResponse = await fetch("assets/Basic.shader")
+		let shaderResponse = await fetch(url)
 
 		let shaderSource = await shaderResponse.text();
 		let shaders:any = {};

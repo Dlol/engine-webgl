@@ -1,4 +1,7 @@
-class Texture{
+import Canvas from './Canvas';
+import { Vec2 } from "./Types";
+
+export default class Texture{
 	gl: WebGLRenderingContext | null;
 	texture: WebGLTexture | null;
 	constructor(url: string, canvas: Canvas){
