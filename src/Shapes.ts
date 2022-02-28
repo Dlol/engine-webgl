@@ -1,6 +1,8 @@
 import {Vec2, Color, Colors} from "./Types";
 import Shader from "./Shader";
 import { VertexBuffer, IndexBuffer } from "./Buffers";
+import Texture from "./Texture";
+import Canvas from "./Canvas";
 
 interface Shape{
 	position: Vec2;
@@ -131,32 +133,27 @@ class Triangle implements Shape {
 class TextureRect implements Shape{
 	position: Vec2;
 	size: Vec2;
-	canvas: HTMLCanvasElement;
+	canvas: Canvas;
 	ctx: WebGLRenderingContext;
 	color: Color;
 	shader: Shader;
 	vb: VertexBuffer;
 	ib: IndexBuffer;
-	tb: VertexBuffer;
 
-	constructor(pos: Vec2, size: Vec2, canvas: HTMLCanvasElement, ctx: WebGLRenderingContext, texUrl: string, shader: Shader, dynamic:boolean = false) {
+	constructor(pos: Vec2, size: Vec2, canvas: Canvas, ctx: WebGLRenderingContext, texUrl: string, shader: Shader, dynamic:boolean = false) {
 		this.color = Colors.transparent;
 		this.position = pos;
 		this.size = size;
 		this.canvas = canvas;
+		this.ctx
 		this.ctx = ctx;
 		this.shader = shader;
+		this.texture = new Texture(texUrl, )
 		let positions = [
-			0 + pos.x, 0 + pos.y,
-			1 * size.x + pos.x, 0 + pos.y,
-			0 + pos.x, 1 * size.y + pos.y,
-			1 * size.x + pos.x, 1 * size.y + pos.y,	
-		]
-		let texturePos = [
-			0, 0,
-			1, 0,
-			0, 1,
-			1, 1
+			0 + pos.x, 0 + pos.y, 0, 0,
+			1 * size.x + pos.x, 0 + pos.y, 1, 0,
+			0 + pos.x, 1 * size.y + pos.y, 0, 1,
+			1 * size.x + pos.x, 1 * size.y + pos.y,	1, 1
 		]
 		let idx = [
 			0, 1, 2,
@@ -168,7 +165,6 @@ class TextureRect implements Shape{
 		}
 		this.ib = new IndexBuffer(idx, ctx, type);
 		this.vb = new VertexBuffer(positions, ctx, type);
-		this.tb = new VertexBuffer(texturePos, ctx, type);
 	}
 
 	draw():void {
@@ -176,6 +172,7 @@ class TextureRect implements Shape{
 		this.shader.bind();
 		this.ib.bind();
 		this.vb.bind();
+		this.
 
 		const numComponents = 2;
 		const type = this.ctx.FLOAT;
@@ -191,6 +188,13 @@ class TextureRect implements Shape{
 			offset,
 		);
 		this.ctx.enableVertexAttribArray(programInfo?.attribLocations.vertexPosition);
+
+		this.ctx.vertexAttribPointer(
+			programInfo?.attribLocations.texPosition,
+			2, this.ctx.FLOAT, false, 1, 64
+		);
+		this.ctx.enableVertexAttribArray(programInfo?.attribLocations.texPosition);
+
 		this.ctx.drawElements(this.ctx.TRIANGLES, 6, this.ctx.UNSIGNED_BYTE, 0)
 	}
 }

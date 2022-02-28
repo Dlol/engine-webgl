@@ -47,5 +47,8 @@ export default class Texture{
 	private isPowerOf2(val:number) {
 		return (val & (val - 1)) == 0;
 	}
+	bind(){
+		this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+	}
 }
 

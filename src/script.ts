@@ -42,7 +42,6 @@ class Game{
 	buffers: any;
 	modelMatrix: any;
 	viewMatrix: any;
-	grid: Cell[];
 	counter: number;
 	gridDimen: any;
 	// shapeTest: Shape;
@@ -68,28 +67,12 @@ class Game{
 		this.shader.initShaderProgram(shaders.vert, shaders.frag);
 	
 		this.shader.addAttribLoc("vertexPosition", "aVertexPosition");
+		this.shader.addAttribLoc("texPosition", "aTextureCoord");
 		this.shader.addUniformLoc("projectionMatrix", "uProjectionMatrix");
 		this.shader.addUniformLoc("viewMatrix", "uViewMatrix");
 		this.shader.addUniformLoc("modelMatrix", "uModelMatrix");
 		this.shader.addUniformLoc("color", "uColor");
 		console.log(this.shader.programInfo);
-
-		this.grid = [];
-		this.gridDimen = {
-			x: 32,
-			y: 18
-		} 
-		let frac:Vec2 = {
-			x: canvas.c.width / this.gridDimen.x,
-			y: canvas.c.height / this.gridDimen.y
-		} 
-		for (let index = 0; index < this.gridDimen.x * this.gridDimen.y; index++) {
-			this.grid.push(new Cell(
-				this.canvas,
-				{x: (index % this.gridDimen.x) * frac.x, y: Math.floor(index/this.gridDimen.x) * frac.y}, 
-				{x: frac.x - 4, y: frac.y - 4}, this.shader));
-			// console.table({x: (index % gridDimen.x) * frac.x, y: Math.floor(index/gridDimen.y) * frac.y});	
-		}
 		
 
 		// this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas.c, canvas.gl, Colors.red, this.shader, true);
@@ -189,20 +172,6 @@ class Game{
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
 
-		let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
-		// console.log(index);
-
-		if (mouseButton[0]) {
-			this.grid[index].enabled = true;
-		}
-		if (mouseButton[2]) {
-			this.grid[index].enabled = false;
-		}
-
-		this.grid.forEach(element => {
-			element.draw();
-		});
-
 		// this.shapeTest.draw();
 
 		
@@ -238,28 +207,8 @@ else{
 const game = new Game(canvas);
 
 let shaders:any = {};
-// (async () => {
-// 	let shaderResponse = await fetch("assets/Basic.shader")
 
-// 	let shaderSource = await shaderResponse.text();
-	
-// 	let sources = shaderSource.split(">>");
-// 	sources.forEach(element => {
-// 		if (element == '') {
-// 			return;
-// 		}
-// 		console.log(element);
-// 		let trimmed = element.replace('\r\n', '\n');
-// 		let type = trimmed.slice(0, trimmed.indexOf("<<"));
-// 		let source = trimmed.substring(trimmed.indexOf("<<") + 2);
-// 		shaders[type.toLowerCase()] = source;
-// 	})
-	
-// 	console.log(shaders);
-// 	game.main()
-// }) ();
-
-Shader.Load("assets/Basic.shader").then((val)=>{
+Shader.Load("assets/Textured.shader").then((val)=>{
 	shaders = val;
 	console.log(shaders);
 	
