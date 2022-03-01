@@ -70,7 +70,7 @@ class Game{
 		this.shader.addUniformLoc("projectionMatrix", "uProjectionMatrix");
 		this.shader.addUniformLoc("viewMatrix", "uViewMatrix");
 		this.shader.addUniformLoc("modelMatrix", "uModelMatrix");
-		this.shader.addUniformLoc("color", "uColor");
+		this.shader.addUniformLoc("sampler", "uSampler");
 		console.log(this.shader.programInfo);
 		
 		this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas, "assets/test.png", this.shader, true);
@@ -144,6 +144,7 @@ class Game{
 			false,
 			this.modelMatrix
 		)
+		gl.uniform1i(programInfo?.uniformLocations.sampler, 0)
 		gl.uniform4f(programInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
 		// this.draw()
 		ugh(0)
