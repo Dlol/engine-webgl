@@ -27,6 +27,8 @@ export default class Texture{
 
 		const image = new Image();
 		image.onload = () => {
+			console.log("loading");
+			
 			gl?.bindTexture(gl.TEXTURE_2D, this.texture);
 			gl?.texImage2D(gl.TEXTURE_2D, level, internalFormat, srcFormat, srcType, image);
 
@@ -43,6 +45,8 @@ export default class Texture{
 		};
 
 		image.src = url;
+		console.log(image);
+		
 	}
 	private isPowerOf2(val:number) {
 		return (val & (val - 1)) == 0;
