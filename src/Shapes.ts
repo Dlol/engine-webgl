@@ -139,6 +139,7 @@ class TextureRect implements Shape{
 	shader: Shader;
 	vb: VertexBuffer;
 	ib: IndexBuffer;
+	texture: Texture;
 
 	constructor(pos: Vec2, size: Vec2, canvas: Canvas, ctx: WebGLRenderingContext, texUrl: string, shader: Shader, dynamic:boolean = false) {
 		this.color = Colors.transparent;
@@ -148,7 +149,7 @@ class TextureRect implements Shape{
 		this.ctx
 		this.ctx = ctx;
 		this.shader = shader;
-		this.texture = new Texture(texUrl, )
+		this.texture = new Texture(texUrl, canvas);
 		let positions = [
 			0 + pos.x, 0 + pos.y, 0, 0,
 			1 * size.x + pos.x, 0 + pos.y, 1, 0,
@@ -172,12 +173,12 @@ class TextureRect implements Shape{
 		this.shader.bind();
 		this.ib.bind();
 		this.vb.bind();
-		this.
+		this.texture.bind();
 
 		const numComponents = 2;
 		const type = this.ctx.FLOAT;
 		const normalize = false;
-		const stride = 0;
+		const stride = 24;
 		const offset = 0;
 		this.ctx.vertexAttribPointer(
 			programInfo?.attribLocations.vertexPosition,
@@ -187,11 +188,12 @@ class TextureRect implements Shape{
 			stride,
 			offset,
 		);
+		
 		this.ctx.enableVertexAttribArray(programInfo?.attribLocations.vertexPosition);
 
 		this.ctx.vertexAttribPointer(
 			programInfo?.attribLocations.texPosition,
-			2, this.ctx.FLOAT, false, 1, 64
+			2, this.ctx.FLOAT, true, 12, 24
 		);
 		this.ctx.enableVertexAttribArray(programInfo?.attribLocations.texPosition);
 
@@ -199,4 +201,4 @@ class TextureRect implements Shape{
 	}
 }
 
-export { Rectangle, Triangle, TextureRect };
+export { Shape, Rectangle, Triangle, TextureRect };

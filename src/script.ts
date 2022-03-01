@@ -2,10 +2,9 @@
 // const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
 import {mat4} from 'gl-matrix-ts'
 
-import { mouseButton, mousePos } from "./Events";
 import Canvas from "./Canvas";
 import Shader from "./Shader";
-import { Rectangle } from './Shapes';
+import { Rectangle, TextureRect, Shape } from './Shapes';
 import { Vec2, Colors } from "./Types";
 
 class Cell {
@@ -44,7 +43,7 @@ class Game{
 	viewMatrix: any;
 	counter: number;
 	gridDimen: any;
-	// shapeTest: Shape;
+	shapeTest: Shape;
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
 		this.counter = 0;
@@ -74,9 +73,10 @@ class Game{
 		this.shader.addUniformLoc("color", "uColor");
 		console.log(this.shader.programInfo);
 		
+		this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas, canvas.gl, "assets/test.png", this.shader, true);
+		console.log(this.shapeTest);
+		
 
-		// this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas.c, canvas.gl, Colors.red, this.shader, true);
-	
 		// console.log(shader);
 	
 		// Draw the scene
@@ -172,7 +172,7 @@ class Game{
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
 
-		// this.shapeTest.draw();
+		this.shapeTest.draw();
 
 		
 	}
