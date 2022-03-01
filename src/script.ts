@@ -19,7 +19,7 @@ class Cell {
 		this.canvas = canvas;
 		this.pos = pos;
 		this.dimen = dimensions;
-		this.tile = new Rectangle(pos, dimensions, canvas.c, canvas.gl, Colors.white, shader);
+		this.tile = new Rectangle(pos, dimensions, canvas, Colors.white, shader);
 	}
 
 	draw(){
@@ -73,7 +73,7 @@ class Game{
 		this.shader.addUniformLoc("color", "uColor");
 		console.log(this.shader.programInfo);
 		
-		this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas, canvas.gl, "assets/test.png", this.shader, true);
+		this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas, "assets/test.png", this.shader, true);
 		console.log(this.shapeTest);
 		
 
