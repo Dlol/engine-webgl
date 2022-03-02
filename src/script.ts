@@ -73,7 +73,7 @@ class Game{
 		this.shader.addUniformLoc("sampler", "uSampler");
 		console.log(this.shader.programInfo);
 		
-		this.shapeTest = new TextureRect({x:20, y:20}, {x:20, y:20}, canvas, "assets/test.png", this.shader, true);
+		this.shapeTest = new TextureRect({x:100, y:20}, {x:256, y:256}, canvas, "assets/test3.png", this.shader, false);
 		console.log(this.shapeTest);
 		
 
@@ -155,7 +155,7 @@ class Game{
 		const { gl } = this.canvas;
 		// const programInfo = this.shader.programInfo;
 
-		gl.clearColor(0.0, 0.0, 0.0, 1.0);
+		gl.clearColor(0, 0, 0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
 
 		// mat4.fromRotationTranslationScale(

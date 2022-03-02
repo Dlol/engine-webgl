@@ -1,12 +1,15 @@
 import Canvas from './Canvas';
+import Shader from './Shader';
 import { Vec2 } from "./Types";
 
 export default class Texture{
 	gl: WebGLRenderingContext | null;
 	texture: WebGLTexture | null;
-	constructor(url: string, canvas: Canvas){
+	shader: Shader;
+	constructor(url: string, canvas: Canvas, shader: Shader){
 		const { gl } = canvas;
 		this.gl = gl;
+		this.shader = shader;
 		
 		this.texture = gl?.createTexture();
 		if (this.texture == undefined) {
@@ -35,13 +38,19 @@ export default class Texture{
 			// decide to generate mipmaps
 			if (this.isPowerOf2(image.width) && this.isPowerOf2(image.height)) {
 				gl?.generateMipmap(gl.TEXTURE_2D);
+				console.log("mips");
+				
 			}
 			else {
 				// turn off mips
 				gl?.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
 				gl?.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
 				gl?.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+				console.log("no mips");
+				
 			}
+			console.log("loaded");
+			
 		};
 
 		image.src = url;
@@ -52,7 +61,9 @@ export default class Texture{
 		return (val & (val - 1)) == 0;
 	}
 	bind(){
+		this.gl.activeTexture(this.gl.TEXTURE0);
 		this.gl.bindTexture(this.gl.TEXTURE_2D, this.texture);
+		this.gl.uniform1i(this.shader.programInfo.uniformLocations.uSampler, 0);
 	}
 }
 

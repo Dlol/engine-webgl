@@ -1,5 +1,3 @@
-// basically importing but in pre es2016 ig
-
 export default class Canvas{
 	c: HTMLCanvasElement;
 	gl: WebGLRenderingContext | null;
