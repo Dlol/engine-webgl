@@ -147,18 +147,18 @@ class TextureRect implements Shape{
 		let {gl:ctx} = canvas;
 		this.shader = shader;
 		this.texture = new Texture(texUrl, canvas, shader);
-		// let positions = [
-		// 	0 + pos.x, 0 + pos.y, 0, 0,
-		// 	size.x + pos.x, 0 + pos.y, 1, 0,
-		// 	0 + pos.x, size.y + pos.y, 0, 1,
-		// 	size.x + pos.x, size.y + pos.y,	1, 1
-		// ]
 		let positions = [
-			0, 0,    0, 0,
-			256, 0,  10, 0,
-			0, 256,  0, 30,
-			256,256, 30, 30
+			0 + pos.x, 0 + pos.y, 0, 0,
+			size.x + pos.x, 0 + pos.y, 1, 0,
+			0 + pos.x, size.y + pos.y, 0, 1,
+			size.x + pos.x, size.y + pos.y,	1, 1
 		]
+		// let positions = [
+		// 	0, 0,    0, 0,
+		// 	256, 0,  1, 0,
+		// 	0, 256,  0, 1,
+		// 	256,256, 1, 1
+		// ]
 		let idx = [
 			0, 1, 2,
 			3, 1, 2
@@ -182,7 +182,7 @@ class TextureRect implements Shape{
 		const numComponents = 2;
 		const type = ctx.FLOAT;
 		const normalize = false;
-		const stride = 18;
+		const stride = 16;
 		const offset = 0;
 		ctx.vertexAttribPointer(
 			programInfo?.attribLocations.vertexPosition,
@@ -197,7 +197,7 @@ class TextureRect implements Shape{
 
 		ctx.vertexAttribPointer(
 			programInfo?.attribLocations.texPosition,
-			2, ctx.FLOAT, false, 18, 24
+			2, ctx.FLOAT, false, 16, 8
 		);
 		ctx.enableVertexAttribArray(programInfo?.attribLocations.texPosition);
 

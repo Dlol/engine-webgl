@@ -7,36 +7,36 @@ import Shader from "./Shader";
 import { Rectangle, TextureRect, Shape } from './Shapes';
 import { Vec2, Colors } from "./Types";
 
-class Cell {
-	enabled: boolean;
-	canvas: Canvas;
-	pos: Vec2;
-	dimen: Vec2;
-	tile: Rectangle;
+// class Cell {
+// 	enabled: boolean;
+// 	canvas: Canvas;
+// 	pos: Vec2;
+// 	dimen: Vec2;
+// 	tile: Rectangle;
 
-	constructor(canvas:Canvas, pos:Vec2, dimensions:Vec2, shader: Shader) {
-		this.enabled = false;
-		this.canvas = canvas;
-		this.pos = pos;
-		this.dimen = dimensions;
-		this.tile = new Rectangle(pos, dimensions, canvas, Colors.white, shader);
-	}
+// 	constructor(canvas:Canvas, pos:Vec2, dimensions:Vec2, shader: Shader) {
+// 		this.enabled = false;
+// 		this.canvas = canvas;
+// 		this.pos = pos;
+// 		this.dimen = dimensions;
+// 		this.tile = new Rectangle(pos, dimensions, canvas, Colors.white, shader);
+// 	}
 
-	draw(){
-		if (this.enabled) {
-			this.tile.color = Colors.white;
-		}
-		else{
-			this.tile.color = Colors.black;
-		}
+// 	draw(){
+// 		if (this.enabled) {
+// 			this.tile.color = Colors.white;
+// 		}
+// 		else{
+// 			this.tile.color = Colors.black;
+// 		}
 
-		this.tile.draw();
-	}
-}
+// 		this.tile.draw();
+// 	}
+// }
 
 class Game{
 	canvas: any;
-	shader: Shader | undefined;
+	sTextured: Shader | undefined;
 	rectangle: Rectangle | undefined;
 	buffers: any;
 	modelMatrix: any;
@@ -44,6 +44,7 @@ class Game{
 	counter: number;
 	gridDimen: any;
 	shapeTest: Shape;
+	sBasic: Shader;
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
 		this.counter = 0;
@@ -62,25 +63,34 @@ class Game{
 		}
 	
 		// Makes an instance of the Shader class to hold our shader
-		this.shader = new Shader(canvas);
-		this.shader.initShaderProgram(shaders.vert, shaders.frag);
+		this.sTextured = new Shader(canvas);
+		this.sTextured.initShaderProgram(shaders.textured.vert, shaders.textured.frag);
 	
-		this.shader.addAttribLoc("vertexPosition", "aVertexPosition");
-		this.shader.addAttribLoc("texPosition", "aTextureCoord");
-		this.shader.addUniformLoc("projectionMatrix", "uProjectionMatrix");
-		this.shader.addUniformLoc("viewMatrix", "uViewMatrix");
-		this.shader.addUniformLoc("modelMatrix", "uModelMatrix");
-		this.shader.addUniformLoc("sampler", "uSampler");
-		console.log(this.shader.programInfo);
+		this.sTextured.addAttribLoc("vertexPosition", "aVertexPosition");
+		this.sTextured.addAttribLoc("texPosition", "aTextureCoord");
+		this.sTextured.addUniformLoc("projectionMatrix", "uProjectionMatrix");
+		this.sTextured.addUniformLoc("viewMatrix", "uViewMatrix");
+		this.sTextured.addUniformLoc("modelMatrix", "uModelMatrix");
+		this.sTextured.addUniformLoc("sampler", "uSampler");
+
+		this.sBasic = new Shader(canvas);
+		this.sBasic.initShaderProgram(shaders.Basic.vert, shaders.Basic.frag);
+	
+		this.sBasic.addAttribLoc("vertexPosition", "aVertexPosition");
+		this.sBasic.addUniformLoc("projectionMatrix", "uProjectionMatrix");
+		this.sBasic.addUniformLoc("viewMatrix", "uViewMatrix");
+		this.sBasic.addUniformLoc("modelMatrix", "uModelMatrix");
+		this.sBasic.addUniformLoc("color", "uColor");
 		
-		this.shapeTest = new TextureRect({x:100, y:20}, {x:256, y:256}, canvas, "assets/test3.png", this.shader, false);
+		this.rectangle = new Rectangle({x:90, y:10}, {x:210, y:210}, canvas, Colors.black, this.sBasic, false)
+		this.shapeTest = new TextureRect({x:100, y:20}, {x:200, y:200}, canvas, "assets/test.png", this.sTextured, false);
 		console.log(this.shapeTest);
 		
 
 		// console.log(shader);
 	
 		// Draw the scene
-		if (this.shader.programInfo == null || this.shader == null) {
+		if (this.sTextured.programInfo == null || this.sTextured == null) {
 			alert("screaming screaming this.main()")
 		} else {
 			this.drawScene();
@@ -91,7 +101,8 @@ class Game{
 	drawScene() {
 
 		const { gl } = this.canvas;
-		const programInfo = this.shader?.programInfo;
+		const tProgramInfo = this.sTextured?.programInfo;
+		const bProgramInfo = this.sBasic?.programInfo;
 		// const buffers = this.buffers;
 		gl.enable(gl.BLEND)
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -124,36 +135,55 @@ class Game{
 	
 		// Tell WebGL to use our program when drawing
 	
-		gl.useProgram(programInfo?.program);
+		this.sTextured.bind();
 	
 		// Set the shader uniforms
 	
 		gl.uniformMatrix4fv(
-			programInfo?.uniformLocations.projectionMatrix,
+			tProgramInfo?.uniformLocations.projectionMatrix,
 			false,
 			projectionMatrix,
 		);
 		gl.uniformMatrix4fv(
-			programInfo?.uniformLocations.viewMatrix,
+			tProgramInfo?.uniformLocations.viewMatrix,
 			false,
 			this.viewMatrix,
 		);
 		gl.uniformMatrix4fv(
 			// @ts-ignore
-			programInfo?.uniformLocations.modelMatrix,
+			tProgramInfo?.uniformLocations.modelMatrix,
 			false,
 			this.modelMatrix
 		)
-		gl.uniform1i(programInfo?.uniformLocations.sampler, 0)
-		gl.uniform4f(programInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
+		gl.uniform1i(tProgramInfo?.uniformLocations.sampler, 0)
+
+		this.sBasic.bind();
+	
+		// Set the shader uniforms
+	
+		gl.uniformMatrix4fv(
+			bProgramInfo?.uniformLocations.projectionMatrix,
+			false,
+			projectionMatrix,
+		);
+		gl.uniformMatrix4fv(
+			bProgramInfo?.uniformLocations.viewMatrix,
+			false,
+			this.viewMatrix,
+		);
+		gl.uniformMatrix4fv(
+			// @ts-ignore
+			bProgramInfo?.uniformLocations.modelMatrix,
+			false,
+			this.modelMatrix
+		)
+		gl.uniform4f(bProgramInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
 		// this.draw()
 		ugh(0)
 	}
 
 	draw(_delta: number) {
-		// console.log(this);
 		const { gl } = this.canvas;
-		// const programInfo = this.shader.programInfo;
 
 		gl.clearColor(0, 0, 0, 1.0);
 		gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
@@ -172,7 +202,7 @@ class Game{
 		// 	this.modelMatrix,
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
-
+		this.rectangle.draw();
 		this.shapeTest.draw();
 
 		
@@ -210,10 +240,13 @@ const game = new Game(canvas);
 let shaders:any = {};
 
 Shader.Load("assets/Textured.shader").then((val)=>{
-	shaders = val;
-	console.log(shaders);
-	
-	game.main();
+	shaders.textured = val;
+	Shader.Load("assets/Basic.shader").then((val)=>{
+		shaders.Basic = val;
+		console.log(shaders);
+		
+		game.main();
+	})
 }).catch(()=>{alert("um oops")});
 
 
