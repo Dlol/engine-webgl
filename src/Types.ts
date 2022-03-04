@@ -25,11 +25,20 @@ class Colors {
      * @param b blue
      * @returns the color
      */
-    static fromRGB(r:number, g:number, b:number){
+    static fromRGB(r:number, g:number, b:number): Color{
         return {
             r: r/255,
             g: g/255,
-            b: b/255
+            b: b/255,
+            a: 1
+        }
+    }
+    static fromRGBA(r:number, g:number, b:number, a: number): Color{
+        return {
+            r: r/255,
+            g: g/255,
+            b: b/255,
+            a: a/255
         }
     }
 

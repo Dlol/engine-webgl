@@ -4,8 +4,8 @@ import {mat4} from 'gl-matrix-ts'
 
 import Canvas from "./Canvas";
 import Shader from "./Shader";
-import { Rectangle, TextureRect, Shape } from './Shapes';
-import { Vec2, Colors } from "./Types";
+import { TextureRect, Shape } from './Shapes';
+import { Vec2 } from "./Types";
 
 // class Cell {
 // 	enabled: boolean;
@@ -37,7 +37,6 @@ import { Vec2, Colors } from "./Types";
 class Game{
 	canvas: any;
 	sTextured: Shader | undefined;
-	rectangle: Rectangle | undefined;
 	buffers: any;
 	modelMatrix: any;
 	viewMatrix: any;
@@ -73,17 +72,16 @@ class Game{
 		this.sTextured.addUniformLoc("modelMatrix", "uModelMatrix");
 		this.sTextured.addUniformLoc("sampler", "uSampler");
 
-		this.sBasic = new Shader(canvas);
-		this.sBasic.initShaderProgram(shaders.Basic.vert, shaders.Basic.frag);
+		// this.sBasic = new Shader(canvas);
+		// this.sBasic.initShaderProgram(shaders.Basic.vert, shaders.Basic.frag);
 	
-		this.sBasic.addAttribLoc("vertexPosition", "aVertexPosition");
-		this.sBasic.addUniformLoc("projectionMatrix", "uProjectionMatrix");
-		this.sBasic.addUniformLoc("viewMatrix", "uViewMatrix");
-		this.sBasic.addUniformLoc("modelMatrix", "uModelMatrix");
-		this.sBasic.addUniformLoc("color", "uColor");
+		// this.sBasic.addAttribLoc("vertexPosition", "aVertexPosition");
+		// this.sBasic.addUniformLoc("projectionMatrix", "uProjectionMatrix");
+		// this.sBasic.addUniformLoc("viewMatrix", "uViewMatrix");
+		// this.sBasic.addUniformLoc("modelMatrix", "uModelMatrix");
+		// this.sBasic.addUniformLoc("color", "uColor");
 		
-		this.rectangle = new Rectangle({x:90, y:10}, {x:210, y:210}, canvas, Colors.black, this.sBasic, false)
-		this.shapeTest = new TextureRect({x:100, y:20}, {x:200, y:200}, canvas, "assets/test.png", this.sTextured, false);
+		this.shapeTest = new TextureRect({x:100, y:20}, {x:200, y:200}, canvas, "assets/test2.png", this.sTextured, false);
 		console.log(this.shapeTest);
 		
 
@@ -102,7 +100,7 @@ class Game{
 
 		const { gl } = this.canvas;
 		const tProgramInfo = this.sTextured?.programInfo;
-		const bProgramInfo = this.sBasic?.programInfo;
+		// const bProgramInfo = this.sBasic?.programInfo;
 		// const buffers = this.buffers;
 		gl.enable(gl.BLEND)
 		gl.blendFunc(gl.SRC_ALPHA, gl.ONE_MINUS_SRC_ALPHA);
@@ -157,27 +155,26 @@ class Game{
 		)
 		gl.uniform1i(tProgramInfo?.uniformLocations.sampler, 0)
 
-		this.sBasic.bind();
+		// this.sBasic.bind();
 	
-		// Set the shader uniforms
+		// // Set the shader uniforms
 	
-		gl.uniformMatrix4fv(
-			bProgramInfo?.uniformLocations.projectionMatrix,
-			false,
-			projectionMatrix,
-		);
-		gl.uniformMatrix4fv(
-			bProgramInfo?.uniformLocations.viewMatrix,
-			false,
-			this.viewMatrix,
-		);
-		gl.uniformMatrix4fv(
-			// @ts-ignore
-			bProgramInfo?.uniformLocations.modelMatrix,
-			false,
-			this.modelMatrix
-		)
-		gl.uniform4f(bProgramInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
+		// gl.uniformMatrix4fv(
+		// 	bProgramInfo?.uniformLocations.projectionMatrix,
+		// 	false,
+		// 	projectionMatrix,
+		// );
+		// gl.uniformMatrix4fv(
+		// 	bProgramInfo?.uniformLocations.viewMatrix,
+		// 	false,
+		// 	this.viewMatrix,
+		// );
+		// gl.uniformMatrix4fv(
+		// 	bProgramInfo?.uniformLocations.modelMatrix,
+		// 	false,
+		// 	this.modelMatrix
+		// )
+		// gl.uniform4f(bProgramInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
 		// this.draw()
 		ugh(0)
 	}
@@ -202,7 +199,6 @@ class Game{
 		// 	this.modelMatrix,
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
-		this.rectangle.draw();
 		this.shapeTest.draw();
 
 		
@@ -224,6 +220,7 @@ let pos:Vec2 = {
 // 	y: 1
 // }
 
+1 + 1
 
 const canvas = new Canvas(window.innerWidth, window.innerHeight);
 

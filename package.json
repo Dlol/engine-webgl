@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "tsc && vite build && surge --project ./dist/ --domain dlols-engine-test.surge.sh"
+    "deploy": "tsc && vite build && surge --project ./dist/"
   },
   "devDependencies": {
     "typescript": "^4.5.4",

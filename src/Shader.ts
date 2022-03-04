@@ -105,6 +105,8 @@ export default class Shader{
 	}
 
 	static async Load(url:string): Promise<object>{
+		console.log("loading " + url);
+		
 		let shaderResponse = await fetch(url)
 
 		let shaderSource = await shaderResponse.text();
@@ -121,6 +123,8 @@ export default class Shader{
 			shaders[type.toLowerCase()] = source;
 		})
 		return new Promise<object>((resolve, reject) => {
+			console.log("returning");
+			
 			resolve(shaders);
 		})
 	}
