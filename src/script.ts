@@ -46,6 +46,8 @@ class Game{
 	shapeTest: Shape;
 	sBasic: Shader;
 	grid: Cell[];
+	initEnabled: boolean;
+	prevClicked: boolean[];
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
 		this.counter = 0;
@@ -201,6 +203,8 @@ class Game{
 			this.modelMatrix
 		)
 		gl.uniform4f(bProgramInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
+		this.prevClicked = [];
+		this.initEnabled = false;
 		this.draw(0)
 		ugh(0)
 	}
@@ -222,9 +226,19 @@ class Game{
 		let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
 		// console.log(index);
 
+		if (mouseButton[0] && !this.prevClicked[0]) {
+			this.initEnabled = this.grid[index].enabled;
+			console.log("just clicked");
+			
+		}
+
 		if (mouseButton[0] && index < this.grid.length) {
-			this.grid[index].enabled = true;
-			console.log(index);
+			this.grid[index].enabled = !this.initEnabled;
+			// console.log(mouseButton);
+			// console.log(this.prevClicked);
+			// console.log("hi");
+			
+			// console.log(index);
 			
 		}
 		if (mouseButton[2] && index < this.grid.length) {
@@ -241,6 +255,8 @@ class Game{
 		this.grid.forEach((element) => {
 			element.draw();
 		})
+
+		this.prevClicked = [...mouseButton];
 	}
 }
 
