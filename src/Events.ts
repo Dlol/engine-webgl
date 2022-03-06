@@ -26,4 +26,18 @@ window.addEventListener("mouseup", (e) =>{
 	mouseButton[e.button] = false;
 })
 
+window.addEventListener("touchmove", (e)=>{
+	let maintouch = e.changedTouches[0];
+	mousePos.x = maintouch.clientX;
+	mousePos.y = maintouch.clientY;
+})
+
+window.addEventListener("touchstart", (e)=>{
+	mouseButton[0] = true;
+})
+
+window.addEventListener("touchend", (e)=>{
+	mouseButton[0] = false;
+})
+
 export { curkeys, mouseButton, mousePos }

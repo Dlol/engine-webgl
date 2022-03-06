@@ -3,36 +3,37 @@
 import {mat4} from 'gl-matrix-ts'
 
 import Canvas from "./Canvas";
+import { mouseButton, mousePos } from './Events';
 import Shader from "./Shader";
-import { TextureRect, Shape } from './Shapes';
-import { Vec2 } from "./Types";
+import { Shape, Rectangle } from './Shapes';
+import { Colors, Vec2 } from "./Types";
 
-// class Cell {
-// 	enabled: boolean;
-// 	canvas: Canvas;
-// 	pos: Vec2;
-// 	dimen: Vec2;
-// 	tile: Rectangle;
+class Cell {
+	enabled: boolean;
+	canvas: Canvas;
+	pos: Vec2;
+	dimen: Vec2;
+	tile: Rectangle;
 
-// 	constructor(canvas:Canvas, pos:Vec2, dimensions:Vec2, shader: Shader) {
-// 		this.enabled = false;
-// 		this.canvas = canvas;
-// 		this.pos = pos;
-// 		this.dimen = dimensions;
-// 		this.tile = new Rectangle(pos, dimensions, canvas, Colors.white, shader);
-// 	}
+	constructor(canvas:Canvas, pos:Vec2, dimensions:Vec2, shader: Shader) {
+		this.enabled = false;
+		this.canvas = canvas;
+		this.pos = pos;
+		this.dimen = dimensions;
+		this.tile = new Rectangle(pos, dimensions, canvas, Colors.white, shader);
+	}
 
-// 	draw(){
-// 		if (this.enabled) {
-// 			this.tile.color = Colors.white;
-// 		}
-// 		else{
-// 			this.tile.color = Colors.black;
-// 		}
+	draw(){
+		if (this.enabled) {
+			this.tile.color = Colors.white;
+		}
+		else{
+			this.tile.color = Colors.black;
+		}
 
-// 		this.tile.draw();
-// 	}
-// }
+		this.tile.draw();
+	}
+}
 
 class Game{
 	canvas: any;
@@ -41,9 +42,10 @@ class Game{
 	modelMatrix: any;
 	viewMatrix: any;
 	counter: number;
-	gridDimen: any;
+	gridDimen: Vec2;
 	shapeTest: Shape;
 	sBasic: Shader;
+	grid: Cell[];
 	constructor(canvas: Canvas){
 		this.canvas = canvas;
 		this.counter = 0;
@@ -62,44 +64,68 @@ class Game{
 		}
 	
 		// Makes an instance of the Shader class to hold our shader
-		this.sTextured = new Shader(canvas);
-		this.sTextured.initShaderProgram(shaders.textured.vert, shaders.textured.frag);
+		// this.sTextured = new Shader(canvas);
+		// this.sTextured.initShaderProgram(shaders.textured.vert, shaders.textured.frag);
 	
-		this.sTextured.addAttribLoc("vertexPosition", "aVertexPosition");
-		this.sTextured.addAttribLoc("texPosition", "aTextureCoord");
-		this.sTextured.addUniformLoc("projectionMatrix", "uProjectionMatrix");
-		this.sTextured.addUniformLoc("viewMatrix", "uViewMatrix");
-		this.sTextured.addUniformLoc("modelMatrix", "uModelMatrix");
-		this.sTextured.addUniformLoc("sampler", "uSampler");
+		// this.sTextured.addAttribLoc("vertexPosition", "aVertexPosition");
+		// this.sTextured.addAttribLoc("texPosition", "aTextureCoord");
+		// this.sTextured.addUniformLoc("projectionMatrix", "uProjectionMatrix");
+		// this.sTextured.addUniformLoc("viewMatrix", "uViewMatrix");
+		// this.sTextured.addUniformLoc("modelMatrix", "uModelMatrix");
+		// this.sTextured.addUniformLoc("sampler", "uSampler");
 
-		// this.sBasic = new Shader(canvas);
-		// this.sBasic.initShaderProgram(shaders.Basic.vert, shaders.Basic.frag);
+		this.sBasic = new Shader(canvas);
+		this.sBasic.initShaderProgram(shaders.Basic.vert, shaders.Basic.frag);
 	
-		// this.sBasic.addAttribLoc("vertexPosition", "aVertexPosition");
-		// this.sBasic.addUniformLoc("projectionMatrix", "uProjectionMatrix");
-		// this.sBasic.addUniformLoc("viewMatrix", "uViewMatrix");
-		// this.sBasic.addUniformLoc("modelMatrix", "uModelMatrix");
-		// this.sBasic.addUniformLoc("color", "uColor");
+		this.sBasic.addAttribLoc("vertexPosition", "aVertexPosition");
+		this.sBasic.addUniformLoc("projectionMatrix", "uProjectionMatrix");
+		this.sBasic.addUniformLoc("viewMatrix", "uViewMatrix");
+		this.sBasic.addUniformLoc("modelMatrix", "uModelMatrix");
+		this.sBasic.addUniformLoc("color", "uColor");
 		
-		this.shapeTest = new TextureRect({x:100, y:20}, {x:200, y:200}, canvas, "assets/test2.png", this.sTextured, false);
-		console.log(this.shapeTest);
+		// this.shapeTest = new TextureRect({x:100, y:20}, {x:200, y:200}, canvas, "assets/test2.png", this.sTextured, false);
+		// console.log(this.shapeTest);
+		this.gridDimen = {
+			x: 32,
+			y: 18
+		}
+		const frac:Vec2 ={
+			x: canvas.c.width / this.gridDimen.x,
+			y: canvas.c.height / this.gridDimen.y
+		}
+		console.log(canvas.c.width);
+		console.log(canvas.c.height);
+		console.log(frac);
 		
+		
+		this.grid = [];
+		for (let i = 0; i < this.gridDimen.x * this.gridDimen.y; i++) {
+			let tempPos:Vec2 = {
+				x: i % this.gridDimen.x * frac.x,
+				y: Math.floor(i/this.gridDimen.x) * frac.y
+			}
+			this.grid.push(new Cell(canvas, tempPos, {
+				x: frac.x - 2,
+				y: frac.y - 2
+			}, this.sBasic));
+		}
 
 		// console.log(shader);
 	
 		// Draw the scene
-		if (this.sTextured.programInfo == null || this.sTextured == null) {
-			alert("screaming screaming this.main()")
-		} else {
+		// if (this.sTextured.programInfo == null || this.sTextured == null) {
+		// 	alert("screaming screaming this.main()")
+		// } else {
 			this.drawScene();
-		}
+		// }
 	}
 
 
 	drawScene() {
 
 		const { gl } = this.canvas;
-		const tProgramInfo = this.sTextured?.programInfo;
+		// const tProgramInfo = this.sTextured?.programInfo;
+		const bProgramInfo = this.sBasic?.programInfo;
 		// const bProgramInfo = this.sBasic?.programInfo;
 		// const buffers = this.buffers;
 		gl.enable(gl.BLEND)
@@ -133,49 +159,49 @@ class Game{
 	
 		// Tell WebGL to use our program when drawing
 	
-		this.sTextured.bind();
-	
-		// Set the shader uniforms
-	
-		gl.uniformMatrix4fv(
-			tProgramInfo?.uniformLocations.projectionMatrix,
-			false,
-			projectionMatrix,
-		);
-		gl.uniformMatrix4fv(
-			tProgramInfo?.uniformLocations.viewMatrix,
-			false,
-			this.viewMatrix,
-		);
-		gl.uniformMatrix4fv(
-			// @ts-ignore
-			tProgramInfo?.uniformLocations.modelMatrix,
-			false,
-			this.modelMatrix
-		)
-		gl.uniform1i(tProgramInfo?.uniformLocations.sampler, 0)
-
-		// this.sBasic.bind();
+		// this.sTextured.bind();
 	
 		// // Set the shader uniforms
 	
 		// gl.uniformMatrix4fv(
-		// 	bProgramInfo?.uniformLocations.projectionMatrix,
+		// 	tProgramInfo?.uniformLocations.projectionMatrix,
 		// 	false,
 		// 	projectionMatrix,
 		// );
 		// gl.uniformMatrix4fv(
-		// 	bProgramInfo?.uniformLocations.viewMatrix,
+		// 	tProgramInfo?.uniformLocations.viewMatrix,
 		// 	false,
 		// 	this.viewMatrix,
 		// );
 		// gl.uniformMatrix4fv(
-		// 	bProgramInfo?.uniformLocations.modelMatrix,
+		// 	// @ts-ignore
+		// 	tProgramInfo?.uniformLocations.modelMatrix,
 		// 	false,
 		// 	this.modelMatrix
 		// )
-		// gl.uniform4f(bProgramInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
-		// this.draw()
+		// gl.uniform1i(tProgramInfo?.uniformLocations.sampler, 0)
+
+		this.sBasic.bind();
+	
+		// Set the shader uniforms
+	
+		gl.uniformMatrix4fv(
+			bProgramInfo?.uniformLocations.projectionMatrix,
+			false,
+			projectionMatrix,
+		);
+		gl.uniformMatrix4fv(
+			bProgramInfo?.uniformLocations.viewMatrix,
+			false,
+			this.viewMatrix,
+		);
+		gl.uniformMatrix4fv(
+			bProgramInfo?.uniformLocations.modelMatrix,
+			false,
+			this.modelMatrix
+		)
+		gl.uniform4f(bProgramInfo?.uniformLocations.color, 1, 0.5, 0.3, 1);
+		this.draw(0)
 		ugh(0)
 	}
 
@@ -193,15 +219,28 @@ class Game{
 		// 	[scale.x, scale.y, 0]
 		// );
 
+		let index = Math.floor(mousePos.x / canvas.c.clientWidth * this.gridDimen.x) + (Math.floor(mousePos.y / canvas.c.clientHeight * this.gridDimen.y) * this.gridDimen.x)
+		// console.log(index);
+
+		if (mouseButton[0] && index < this.grid.length) {
+			this.grid[index].enabled = true;
+			console.log(index);
+			
+		}
+		if (mouseButton[2] && index < this.grid.length) {
+			this.grid[index].enabled = false;
+		}
+
 		// gl.uniformMatrix4fv(
 		// 	programInfo.uniformLocations.modelMatrix,
 		// 	false,
 		// 	this.modelMatrix,
 		// );
 		// gl.drawElements(gl.TRIANGLES, 6, gl.UNSIGNED_BYTE, 0)
-		this.shapeTest.draw();
 
-		
+		this.grid.forEach((element) => {
+			element.draw();
+		})
 	}
 }
 
