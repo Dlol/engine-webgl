@@ -34,6 +34,9 @@ window.addEventListener("touchmove", (e)=>{
 
 window.addEventListener("touchstart", (e)=>{
 	mouseButton[0] = true;
+	let maintouch = e.changedTouches[0];
+	mousePos.x = maintouch.clientX;
+	mousePos.y = maintouch.clientY;
 })
 
 window.addEventListener("touchend", (e)=>{
