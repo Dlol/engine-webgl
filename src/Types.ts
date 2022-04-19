@@ -33,6 +33,14 @@ class Colors {
             a: 1
         }
     }
+    /**
+     * Makes a color from rgba values (0-255)
+     * @param r red
+     * @param g green
+     * @param b blue
+     * @param a alpha
+     * @returns the color
+     */
     static fromRGBA(r:number, g:number, b:number, a: number): Color{
         return {
             r: r/255,
